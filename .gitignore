@@ -1,0 +1,11 @@
+Plaintext
+
+# Dependency directories
+node_modules/
+
+# Environment variables (CRITICAL TO KEEP SECRET)
+.env
+
+# OS generated files
+.DS_Store
+Thumbs.db
