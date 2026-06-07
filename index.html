@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dr. Sharma Homeopathy — Book Appointment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:   #085041;
+      --green-mid:    #0F6E56;
+      --green:        #1D9E75;
+      --green-light:  #9FE1CB;
+      --green-pale:   #E1F5EE;
+      --amber:        #EF9F27;
+      --text-primary: #1a1a18;
+      --text-muted:   #5F5E5A;
+      --text-hint:    #B4B2A9;
+      --border:       rgba(8, 80, 65, 0.18);
+      --radius-sm:    8px;
+      --radius-md:    12px;
+      --radius-lg:    18px;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #f0f7f4;
+      min-height: 100vh;
+      padding: 2.5rem 1rem 4rem;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 15% 10%, rgba(29,158,117,0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 85% 90%, rgba(239,159,39,0.07) 0%, transparent 60%);
+    }
+
+    /* ── Header ── */
+    .header { text-align: center; margin-bottom: 2.5rem; animation: fadeDown 0.6s ease both; }
+    .logo { width: 60px; height: 60px; background: var(--green); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem; box-shadow: 0 6px 24px rgba(29,158,117,0.30); }
+    .logo svg { width: 30px; height: 30px; stroke: #fff; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .clinic-name { font-family: 'Cormorant Garamond', serif; font-size: 2.1rem; font-weight: 600;
+                   color: var(--green-dark); letter-spacing: -0.01em; }
+    .clinic-sub  { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+                   color: var(--green); margin-top: 5px; font-weight: 500; }
+
+    /* ── Card ── */
+    .card {
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(16px);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem 2rem;
+      max-width: 580px;
+      margin: 0 auto;
+      box-shadow: 0 12px 48px rgba(8,80,65,0.09);
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    .card-title    { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--green-dark); font-weight: 600; }
+    .card-subtitle { font-size: 13px; color: var(--text-muted); margin-top: 4px; margin-bottom: 1.5rem; }
+
+    .divider { height: 0.5px; background: var(--border); margin: 1.25rem 0; }
+
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.14em;
+      color: var(--green); font-weight: 500; margin-bottom: 1rem;
+    }
+    .section-tag::before { content: ''; display: block; width: 16px; height: 1px; background: var(--green); }
+
+    /* ── Form grid ── */
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 1rem; }
+    .field label { font-size: 12px; font-weight: 500; color: var(--text-muted); }
+    .req { color: #D85A30; }
+
+    .field input,
+    .field textarea,
+    .field select {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; color: var(--text-primary);
+      background: rgba(255,255,255,0.95);
+      border: 0.5px solid rgba(8,80,65,0.22);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      width: 100%;
+    }
+    .field textarea { resize: none; min-height: 90px; line-height: 1.6; }
+    .field input::placeholder,
+    .field textarea::placeholder { color: var(--text-hint); }
+    .field input:focus,
+    .field textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(29,158,117,0.12); }
+
+    .field-error { font-size: 11px; color: #D85A30; display: none; }
+    .field.invalid input,
+    .field.invalid textarea { border-color: #D85A30; }
+    .field.invalid .field-error { display: block; }
+
+    /* ── WhatsApp notice ── */
+    .wa-notice {
+      display: flex; align-items: flex-start; gap: 10px;
+      background: rgba(37,211,102,0.07);
+      border: 0.5px solid rgba(37,211,102,0.30);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 1.5rem;
+    }
+    .wa-notice svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; }
+    .wa-notice p { font-size: 12px; color: var(--green-mid); line-height: 1.55; }
+    .wa-notice strong { font-weight: 500; }
+
+    /* ── Submit button ── */
+    .btn-submit {
+      width: 100%; background: var(--green); color: #fff;
+      font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
+      border: none; border-radius: var(--radius-md);
+      padding: 14px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn-submit:hover   { background: var(--green-mid); }
+    .btn-submit:active  { transform: scale(0.99); }
+    .btn-submit:disabled { background: var(--text-hint); cursor: not-allowed; transform: none; }
+    .btn-submit svg { width: 17px; height: 17px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.35);
+               border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+
+    /* ── Success state ── */
+    .success-card {
+      display: none;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(16px);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      max-width: 580px;
+      margin: 0 auto;
+      text-align: center;
+      box-shadow: 0 12px 48px rgba(8,80,65,0.09);
+      animation: fadeUp 0.5s ease both;
+    }
+    .success-icon { width: 68px; height: 68px; background: var(--green-pale);
+                    border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; }
+    .success-icon svg { width: 32px; height: 32px; stroke: var(--green-mid); fill: none; stroke-width: 2; stroke-linecap: round; }
+    .success-title  { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; color: var(--green-dark); font-weight: 600; }
+    .success-msg    { font-size: 13px; color: var(--text-muted); margin: 0.5rem 0 1.5rem; line-height: 1.6; }
+    .summary-box    { background: var(--green-pale); border-radius: var(--radius-md);
+                      padding: 1rem 1.25rem; text-align: left; font-size: 13px;
+                      color: var(--text-primary); line-height: 2; border: 0.5px solid rgba(29,158,117,0.2); }
+    .summary-box strong { color: var(--green-dark); font-weight: 500; }
+    .btn-new { margin-top: 1.5rem; background: transparent; border: 0.5px solid var(--green);
+               color: var(--green); font-family: 'DM Sans', sans-serif; font-size: 13px;
+               border-radius: 10px; padding: 10px 22px; cursor: pointer; transition: background 0.2s; }
+    .btn-new:hover { background: rgba(29,158,117,0.07); }
+
+    /* ── Error toast ── */
+    .toast {
+      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: #2C2C2A; color: #fff; font-size: 13px; padding: 12px 20px;
+      border-radius: 10px; white-space: nowrap; transition: transform 0.3s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2); z-index: 100;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    @keyframes fadeDown { from { opacity:0; transform:translateY(-16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(16px); }  to { opacity:1; transform:translateY(0); } }
+    @keyframes spin     { to { transform: rotate(360deg); } }
+
+    @media (max-width: 480px) {
+      .row-2 { grid-template-columns: 1fr; }
+      .card, .success-card { padding: 1.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+  </div>
+  <div class="clinic-name">Dr. Sharma Homeopathy</div>
+  <div class="clinic-sub">Heal naturally · Live well</div>
+</div>
+
+<!-- ── Appointment Form ── -->
+<div class="card" id="formCard">
+  <div class="card-title">Book an Appointment</div>
+  <div class="card-subtitle">Fill in your details — we'll confirm your visit promptly.</div>
+
+  <div class="divider"></div>
+  <div class="section-tag">Personal information</div>
+
+  <div class="row-2">
+    <div class="field" id="f-firstName">
+      <label>First name <span class="req">*</span></label>
+      <input type="text" id="firstName" placeholder="Ravi" />
+      <span class="field-error">First name is required</span>
+    </div>
+    <div class="field" id="f-lastName">
+      <label>Last name <span class="req">*</span></label>
+      <input type="text" id="lastName" placeholder="Patel" />
+      <span class="field-error">Last name is required</span>
+    </div>
+  </div>
+
+  <div class="row-2">
+    <div class="field" id="f-mobile">
+      <label>Mobile number <span class="req">*</span></label>
+      <input type="tel" id="mobile" placeholder="+91 98765 43210" maxlength="15" />
+      <span class="field-error">Enter a valid mobile number</span>
+    </div>
+    <div class="field" id="f-apptDate">
+      <label>Appointment date <span class="req">*</span></label>
+      <input type="date" id="apptDate" />
+      <span class="field-error">Please select a date</span>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Address</label>
+    <input type="text" id="address" placeholder="House no., Street, City, PIN" />
+  </div>
+
+  <div class="divider"></div>
+  <div class="section-tag">Health concern</div>
+
+  <div class="field" id="f-problem">
+    <label>Problem statement <span class="req">*</span></label>
+    <textarea id="problem" placeholder="Describe your symptoms, since when, any prior treatments…"></textarea>
+    <span class="field-error">Please describe your health concern</span>
+  </div>
+
+  <div class="wa-notice">
+    <svg viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <p>Your appointment details will be <strong>automatically sent to the doctor's WhatsApp</strong> upon submission, along with a database record.</p>
+  </div>
+
+  <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">
+    <svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+    Confirm appointment
+  </button>
+</div>
+
+<!-- ── Success State ── -->
+<div class="success-card" id="successCard">
+  <div class="success-icon">
+    <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+  </div>
+  <div class="success-title">Appointment booked!</div>
+  <div class="success-msg">Your details have been saved and sent to the doctor via WhatsApp.<br>You'll receive a confirmation call shortly.</div>
+  <div class="summary-box" id="summaryBox"></div>
+  <button class="btn-new" onclick="resetForm()">Book another appointment</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+  // ── Supabase config — paste YOUR values from Supabase → Settings → API ──
+  const SUPABASE_URL  = 'https://bkkqtvxnwtwsrylxunbz.supabase.co';        // e.g. https://xxxx.supabase.co
+  const SUPABASE_ANON = 'sb_publishable_NRYV2utReWyjs1izvmgRDg_LMXTGtB7';   // the long eyJ... key
+  // ────────────────────────────────────────────────────────────────────────
+  const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('apptDate').setAttribute('min', today);
+
+  function showToast(msg, duration = 3500) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), duration);
+  }
+
+  function validate() {
+    const rules = [
+      { id: 'firstName', test: v => v.trim().length > 0 },
+      { id: 'lastName',  test: v => v.trim().length > 0 },
+      { id: 'mobile',    test: v => /^[+\d\s\-]{7,15}$/.test(v.trim()) },
+      { id: 'apptDate',  test: v => v.length > 0 },
+      { id: 'problem',   test: v => v.trim().length > 5 },
+    ];
+    let ok = true;
+    rules.forEach(({ id, test }) => {
+      const el  = document.getElementById(id);
+      const wrap = document.getElementById('f-' + id);
+      if (wrap) {
+        if (!test(el.value)) { wrap.classList.add('invalid'); ok = false; }
+        else wrap.classList.remove('invalid');
+      }
+    });
+    return ok;
+  }
+
+  async function handleSubmit() {
+    if (!validate()) { showToast('Please fill in all required fields.'); return; }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner"></div> Sending…';
+
+    const payload = {
+      firstName: document.getElementById('firstName').value.trim(),
+      lastName:  document.getElementById('lastName').value.trim(),
+      mobile:    document.getElementById('mobile').value.trim(),
+      apptDate:  document.getElementById('apptDate').value,
+      address:   document.getElementById('address').value.trim(),
+      problem:   document.getElementById('problem').value.trim(),
+    };
+
+    try {
+      const { error } = await _supabase
+        .from('appointments')
+        .insert([{
+          first_name: payload.firstName,
+          last_name:  payload.lastName,
+          mobile:     payload.mobile,
+          appt_date:  payload.apptDate,
+          address:    payload.address || null,
+          problem:    payload.problem,
+          status:     'pending',
+        }]);
+
+      if (error) throw new Error(error.message);
+
+      const formatted = new Date(payload.apptDate + 'T00:00:00')
+        .toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+      document.getElementById('summaryBox').innerHTML =
+        `<strong>Name:</strong> ${payload.firstName} ${payload.lastName}<br>` +
+        `<strong>Mobile:</strong> ${payload.mobile}<br>` +
+        `<strong>Date:</strong> ${formatted}<br>` +
+        (payload.address ? `<strong>Address:</strong> ${payload.address}<br>` : '') +
+        `<strong>Concern:</strong> ${payload.problem}`;
+
+      document.getElementById('formCard').style.display = 'none';
+      document.getElementById('successCard').style.display = 'block';
+
+    } catch (err) {
+      showToast('Something went wrong. Please try again.');
+      btn.disabled = false;
+      btn.innerHTML = `<svg viewBox="0 0 24 24" width="17" height="17" stroke="#fff" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg> Confirm appointment`;
+    }
+  }
+
+  function resetForm() {
+    ['firstName','lastName','mobile','apptDate','address','problem'].forEach(id => {
+      document.getElementById(id).value = '';
+      const wrap = document.getElementById('f-' + id);
+      if (wrap) wrap.classList.remove('invalid');
+    });
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = false;
+    btn.innerHTML = `<svg viewBox="0 0 24 24" width="17" height="17" stroke="#fff" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg> Confirm appointment`;
+    document.getElementById('formCard').style.display = 'block';
+    document.getElementById('successCard').style.display = 'none';
+  }
+</script>
+</body>
+</html>
